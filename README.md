@@ -3,7 +3,7 @@ jshint-junit-xml-formatter
 
 A JSHint output formatter that returns results compatible with JUnit ANT
 Task XML. This makes it possible to integrate the results into any
-reporting framework that excepts that format. I have found this
+reporting framework that accepts that format. I have found this
 particularly useful in continuous integration scenarios.
 
 The entire JSHint run is considered a test suite and each file with
