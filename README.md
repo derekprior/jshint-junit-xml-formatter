@@ -21,12 +21,14 @@ as failures under the applicable test case. For example:
 </testsuite>
 ```
 
-== Usage ==
+Usage
+-----
 
 Pass the path to jshint-junit-xml-formatter.js to the JSHint `--reporter`
 option.
 
-== Limitations ==
+Limitations
+-----------
 
 The reporter API provided by JSHint provides access only to failure
 information. Therefore, the resulting XML will only list test cases for
