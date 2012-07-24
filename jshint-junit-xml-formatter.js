@@ -23,8 +23,6 @@ module.exports =
       ">": "&gt;"
     };
 
-    var file, i, issue;
-
     function encode(s) {
       for (var r in pairs) {
         if (typeof(s) !== "undefined") {
@@ -34,8 +32,23 @@ module.exports =
       return s || "";
     }
 
-    function failure_message(issue) {
-      return "line " + issue.line + ", char " + issue.character + ": " + encode(issue.reason);
+    function failure_message(failures) {
+      var count = failures.length;
+      if (count === 1) {
+        return "1 JSHINT Failure";
+      } else {
+        return count + " JSHint Failures";
+      }
+    }
+
+    function failure_details(failures) {
+      var msg = [];
+      var item;
+      for (var i = 0; i < failures.length; i++) {
+        item = failures[i];
+        msg.push(i+1 + ". line " + item.line + ", char " + item.character + ": " + encode(item.reason));
+      }
+      return msg.join("\n");
     }
 
     results.forEach(function (result) {
@@ -49,12 +62,11 @@ module.exports =
     out.push("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
     out.push("<testsuite name=\"" + suite + "\" tests=\"" + Object.keys(files).length + "\" failures=\"" + results.length + "\" errors=\"0\" >");
 
-    for (file in files) {
+    for (var file in files) {
       out.push("\t<testcase name=\"" + file + "\">");
-      for (i = 0; i < files[file].length; i++) {
-        issue = files[file][i];
-        out.push("\t\t<failure message=\"" + failure_message(issue) + "\" />");
-      }
+      out.push("\t\t<failure message=\"" + failure_message(files[file]) + "\" >");
+      out.push(failure_details(files[file]));
+      out.push("\t\t</failure>");
       out.push("\t</testcase>");
     }
 
