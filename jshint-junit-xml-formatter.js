@@ -1,5 +1,4 @@
 /*jshint node:true */
-
 /* Adapted from the default JSHint xml formatter by Derek Prior
  *  http://prioritized.net
  *
@@ -8,9 +7,15 @@
  */
 module.exports =
 {
-  reporter: function (results)
+  reporter: function (results, o)
   {
     "use strict";
+
+    var linted = o.map(function(file) {
+      return file.file;
+    }).filter(function(file) {
+      return file;
+    });
 
     var suite = 'jshint';
     var files = {};
@@ -62,13 +67,14 @@ module.exports =
     out.push("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
     out.push("<testsuite name=\"" + suite + "\" tests=\"" + Object.keys(files).length + "\" failures=\"" + results.length + "\" errors=\"0\" >");
 
-    for (var file in files) {
+    linted.forEach(function(file) {
+      if(!files[file]) return out.push("\t<testcase name=\"" + file + "\"></testcase>");
       out.push("\t<testcase name=\"" + file + "\">");
       out.push("\t\t<failure message=\"" + failure_message(files[file]) + "\" >");
       out.push(failure_details(files[file]));
       out.push("\t\t</failure>");
       out.push("\t</testcase>");
-    }
+    });
 
     out.push("</testsuite>");
     process.stdout.write(out.join("\n") + "\n");
