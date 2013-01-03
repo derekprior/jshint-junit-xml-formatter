@@ -21,7 +21,8 @@ of that node enumerates the messages.
 3. line 1, char 1: &apos;x&apos; is not defined.
 		</failure>
 	</testcase>
-</testsuite>```
+</testsuite>
+```
 
 Usage
 -----
