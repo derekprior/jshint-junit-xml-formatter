@@ -1,2 +1,2 @@
 var path = require('path');
-module.exports = path.resolve('./reporter.js');
+module.exports = path.resolve(__dirname, './reporter.js');

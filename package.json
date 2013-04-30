@@ -1,11 +1,12 @@
 {
   "name": "jshint-junit-reporter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A JSHint reporter for jUnit.",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"
   },
+  "homepage": "https://github.com/xjamundx/jshint-junit-reporter",
   "repository": {
     "type": "git",
     "url": "https://github.com/xjamundx/jshint-junit-reporter.git"
