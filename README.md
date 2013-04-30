@@ -1,4 +1,4 @@
-jshint-junit-reporter
+JSHint JUnit Reporter
 ==========================
 
 A JSHint output report that returns results compatible with JUnit ANT
