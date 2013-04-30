@@ -1,7 +1,7 @@
-jshint-junit-xml-formatter
+jshint-junit-reporter
 ==========================
 
-A JSHint output formatter that returns results compatible with JUnit ANT
+A JSHint output report that returns results compatible with JUnit ANT
 Task XML. This makes it possible to integrate the results into any
 reporting framework that accepts that format. I have found this
 particularly useful in continuous integration scenarios.
@@ -24,11 +24,25 @@ of that node enumerates the messages.
 </testsuite>
 ```
 
+Installation
+------------
+
+Download the file directly on install using NPM:
+`npm install jshint-junit-reporter`
+
 Usage
 -----
 
-Pass the path to jshint-junit-xml-formatter.js to the JSHint `--reporter`
+Pass the path to reporter.js to the JSHint `--reporter`
 option.
+
+You can also use this plugin with newer versions of the grunt-contrib-jshint plugin that support 
+the `report` option using something like this in your `options` object:
+
+    options: {
+        reporter: require('jshint-junit-reporter'),
+        reporterOutput: "junit-output.xml"
+    }
 
 Limitations
 -----------

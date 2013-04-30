@@ -1,10 +1,10 @@
 {
-  "name": "jshint-junit-xml-formatter",
-  "version": "0.0.1",
-  "description": "A JSHint formatter for jUnit.",
-  "main": "jshint-junit-xml-formatter.js",
+  "name": "jshint-junit-reporter",
+  "version": "0.0.3",
+  "description": "A JSHint reporter for jUnit.",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
@@ -14,6 +14,5 @@
     "jshint",
     "junit",
     "jslint"
-  ],
-  "gitHead": "1366ecc83e4cc9b171e77c13de02bbed0ce92601"
+  ]
 }
