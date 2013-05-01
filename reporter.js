@@ -59,6 +59,8 @@ module.exports =
       files[result.file].push(result.error);
     });
 
+    if (!results.length) return;
+
     out.push("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
     out.push("<testsuite name=\"" + suite + "\" tests=\"" + Object.keys(files).length + "\" failures=\"" + results.length + "\" errors=\"0\" >");
 

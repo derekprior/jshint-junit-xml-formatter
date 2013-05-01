@@ -1,6 +1,6 @@
 {
   "name": "jshint-junit-reporter",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A JSHint reporter for jUnit.",
   "main": "index.js",
   "scripts": {
