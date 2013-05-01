@@ -36,8 +36,8 @@ Usage
 Pass the path to reporter.js to the JSHint `--reporter`
 option.
 
-You can also use this plugin with newer versions of the grunt-contrib-jshint plugin that support 
-the `report` option using something like this in your `options` object:
+You can also use this plugin with newer versions of the [grunt-contrib-jshint](https://github.com/gruntjs/grunt-contrib-jshint) plugin that support 
+the `reporter` option using something like this in your `options` object:
 
     options: {
         reporter: require('jshint-junit-reporter'),
