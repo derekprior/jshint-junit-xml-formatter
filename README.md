@@ -48,6 +48,7 @@ Bamboo Integration
 ------------------
 
 In order to hook this into Bamboo I have a 3 step test-plan:
+
 1. Checkout Code
 2. Build Script
 3. Read JUnit XML Files
