@@ -15,6 +15,7 @@ module.exports =
     var suite = 'jshint';
     var files = {};
     var out = [];
+    var temp = [];
     var pairs = {
       "&": "&amp;",
       '"': "&quot;",
@@ -22,6 +23,7 @@ module.exports =
       "<": "&lt;",
       ">": "&gt;"
     };
+    var testnum;
 
     function encode(s) {
       for (var r in pairs) {
@@ -59,10 +61,13 @@ module.exports =
       files[result.file].push(result.error);
     });
 
-    if (!results.length) return;
+    testnum = Object.keys(files).length;
 
     out.push("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-    out.push("<testsuite name=\"" + suite + "\" tests=\"" + Object.keys(files).length + "\" failures=\"" + results.length + "\" errors=\"0\" >");
+    out.push("<testsuite name=\"" + suite + "\" tests=\"" + (testnum === 0 ? 1 : testnum) + "\" failures=\"" + results.length + "\" errors=\"0\" >");
+
+    if (!results.length)
+      out.push("\t<testcase name=\"" + suite + "\" />");
 
     for (var file in files) {
       out.push("\t<testcase name=\"" + file + "\">");
