@@ -61,6 +61,12 @@ tests.push(function() {
   }
 });
 
+// lint this file, but only if you have jshint
+tests.push(function() {
+  console.log('Don\'t forget to lint this file also!');
+  console.log('jshint --reporter=reporter.js reporter.js\n\n');
+});
+
 // run all tests
 tests.forEach(function(test) {
   test();
