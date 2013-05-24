@@ -19,8 +19,64 @@ var mock2 = [{  // 1 error
       reason: 'Missing semicolon.'
   }
 }];
+var mock3 = [ { file: 'reporter.js',
+    error: 
+     { id: '(error)',
+       raw: 'Missing "use strict" statement.',
+       evidence: '  var pairs = {',
+       line: 9,
+       character: 3,
+       scope: '(main)',
+       a: undefined,
+       b: undefined,
+       c: undefined,
+       d: undefined,
+       reason: 'Missing "use strict" statement.' } },
+  { file: 'reporter.js',
+    error: 
+     { id: '(error)',
+       raw: 'Missing "use strict" statement.',
+       evidence: '  var count = failures.length;',
+       line: 25,
+       character: 3,
+       scope: '(main)',
+       a: undefined,
+       b: undefined,
+       c: undefined,
+       d: undefined,
+       reason: 'Missing "use strict" statement.' } },
+  { file: 'reporter.js',
+    error: 
+     { id: '(error)',
+       raw: 'Missing "use strict" statement.',
+       evidence: '  var msg = [];',
+       line: 34,
+       character: 3,
+       scope: '(main)',
+       a: undefined,
+       b: undefined,
+       c: undefined,
+       d: undefined,
+       reason: 'Missing "use strict" statement.' } },
+  { file: 'reporter.js',
+    error: 
+     { id: '(error)',
+       raw: 'Missing "use strict" statement.',
+       evidence: '  console.log(results)',
+       line: 45,
+       character: 3,
+       scope: '(main)',
+       a: undefined,
+       b: undefined,
+       c: undefined,
+       d: undefined,
+       reason: 'Missing "use strict" statement.' } } ];
 var expected1 = '';
-var expected2 = '<?xml version="1.0" encoding="utf-8"?><testsuite name="jshint" tests="1" failures="1" errors="0" ><testcase name="my/file.js"><failure message="1 JSHINT Failure" >1. line 36, char 2: Missing semicolon.</failure></testcase></testsuite>';
+var expected2 = '<?xml version="1.0" encoding="utf-8"?><testsuite name="jshint" tests="1" failures="1" errors="0"><testcase name="my/file.js"><failure message="1 JSHINT Failure">1. line 36, char 2: Missing semicolon.</failure></testcase></testsuite>';
+var expected3 = '<?xml version="1.0" encoding="utf-8"?><testsuite name="jshint" tests="1" failures="4" errors="0"><testcase name="reporter.js"><failure message="4 JSHint Failures">1. line 9, char 3: Missing &quot;use strict&quot; statement. 2. line 25, char 3: Missing &quot;use strict&quot; statement. 3. line 34, char 3: Missing &quot;use strict&quot; statement. 4. line 45, char 3: Missing &quot;use strict&quot; statement.</failure></testcase></testsuite>';
+var expected3 = '<?xml version="1.0" encoding="utf-8"?><testsuite name="jshint" tests="1" failures="4" errors="0"><testcase name="reporter.js"><failure message="4 JSHint Failures">1. line 9, char 3: Missing &quot;use strict&quot; statement.2. line 25, char 3: Missing &quot;use strict&quot; statement.3. line 34, char 3: Missing &quot;use strict&quot; statement.4. line 45, char 3: Missing &quot;use strict&quot; statement.</failure></testcase></testsuite>';
+var strip = new RegExp('[\t\n]', 'g');
+var oldWrite = process.stdout.write.bind(process.stdout);
 
 // sanity check the path name provided
 tests.push(function() {
@@ -38,7 +94,9 @@ tests.push(function() {
 // test output for 0 errors
 tests.push(function() {
   var formatter = require('./reporter.js');
+  process.stdout.write = function() {};
   var results = formatter.reporter(mock1);
+  process.stdout.write = oldWrite;
   var expected = ['<?xml', '<testcase', '<testsuite'];
   if (!results) throw new Error('You should have some XML!');
   expected.forEach(function(str) {
@@ -50,16 +108,26 @@ tests.push(function() {
 
 // test output for 1 error
 tests.push(function() {
-  var oldWrite = process.stdout.write.bind(process.stdout);
   process.stdout.write = function() {};
   var formatter = require('./reporter.js');
   var results = formatter.reporter(mock2);
-  var strip = new RegExp('[\t\n]', 'g');
   process.stdout.write = oldWrite;
   if (results.replace(strip, '') !== expected2.replace(strip, '')) {
     throw new Error('Unexpected results');
   }
 });
+
+// test output for > 1 error
+tests.push(function() {
+  process.stdout.write = function() {};
+  var formatter = require('./reporter.js');
+  var results = formatter.reporter(mock3);
+  process.stdout.write = oldWrite;
+  if (results.replace(strip, '') !== expected3.replace(strip, '')) {
+    throw new Error('Unexpected results');
+  }
+});
+
 
 // lint this file, but only if you have jshint
 tests.push(function() {
