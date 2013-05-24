@@ -1,55 +1,47 @@
 /*jshint node:true */
 
-/* Adapted from the default JSHint xml formatter by Derek Prior
- *  http://prioritized.net
- *
- * Source, documentation, and license available at:
- *   https://github.com/derekprior/jshint-junit-xml-formatter
- */
-module.exports =
-{
-  reporter: function (results)
-  {
-    "use strict";
+"use strict";
 
-    var suite = 'jshint';
-    var files = {};
-    var out = [];
-    var pairs = {
-      "&": "&amp;",
-      '"': "&quot;",
-      "'": "&apos;",
-      "<": "&lt;",
-      ">": "&gt;"
-    };
+var suite = 'jshint';
+var files = {};
+var out = [];
 
-    function encode(s) {
-      for (var r in pairs) {
-        if (typeof(s) !== "undefined") {
-          s = s.replace(new RegExp(r, "g"), pairs[r]);
-        }
-      }
-      return s || "";
+function encode(s) {
+  var pairs = {
+    "&": "&amp;",
+    '"': "&quot;",
+    "'": "&apos;",
+    "<": "&lt;",
+    ">": "&gt;"
+  };
+  for (var r in pairs) {
+    if (typeof(s) !== "undefined") {
+      s = s.replace(new RegExp(r, "g"), pairs[r]);
     }
+  }
+  return s || "";
+}
 
-    function failure_message(failures) {
-      var count = failures.length;
-      if (count === 1) {
-        return "1 JSHINT Failure";
-      } else {
-        return count + " JSHint Failures";
-      }
-    }
+function failure_message(failures) {
+  var count = failures.length;
+  if (count === 1) {
+    return "1 JSHINT Failure";
+  } else {
+    return count + " JSHint Failures";
+  }
+}
 
-    function failure_details(failures) {
-      var msg = [];
-      var item;
-      for (var i = 0; i < failures.length; i++) {
-        item = failures[i];
-        msg.push(i+1 + ". line " + item.line + ", char " + item.character + ": " + encode(item.reason));
-      }
-      return msg.join("\n");
-    }
+function failure_details(failures) {
+  var msg = [];
+  var item;
+  for (var i = 0; i < failures.length; i++) {
+    item = failures[i];
+    msg.push(i+1 + ". line " + item.line + ", char " + item.character + ": " + encode(item.reason));
+  }
+  return msg.join("\n");
+}
+
+exports.reporter = function (results) {
 
     results.forEach(function (result) {
       result.file = result.file.replace(/^\.\//, '');
@@ -78,5 +70,5 @@ module.exports =
 
     process.stdout.write(out);
     return out;
-  }
+
 };
