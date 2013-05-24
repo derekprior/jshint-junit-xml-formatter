@@ -3,8 +3,6 @@
 "use strict";
 
 var suite = 'jshint';
-var files = {};
-var out = [];
 
 function encode(s) {
   var pairs = {
@@ -43,32 +41,37 @@ function failure_details(failures) {
 
 exports.reporter = function (results) {
 
-    results.forEach(function (result) {
-      result.file = result.file.replace(/^\.\//, '');
-      if (!files[result.file]) {
-        files[result.file] = [];
-      }
-      files[result.file].push(result.error);
-    });
+  var out = [];
+  var files = {};
 
-    out.push("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-    out.push("<testsuite name=\"" + suite + "\" tests=\"" + (Object.keys(files).length === 0 ? 1 : Object.keys(files).length) + "\" failures=\"" + results.length + "\" errors=\"0\" >");
-
-    if (!results.length)
-      out.push("\t<testcase name=\"" + suite + "\" />");
-
-    for (var file in files) {
-      out.push("\t<testcase name=\"" + file + "\">");
-      out.push("\t\t<failure message=\"" + failure_message(files[file]) + "\" >");
-      out.push(failure_details(files[file]));
-      out.push("\t\t</failure>");
-      out.push("\t</testcase>");
+  results.forEach(function (result) {
+    result.file = result.file.replace(/^\.\//, '');
+    if (!files[result.file]) {
+      files[result.file] = [];
     }
+    files[result.file].push(result.error);
+  });
 
-    out.push("</testsuite>");
-    out = out.join("\n") + "\n";
+  out.push("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+  out.push("<testsuite name=\"" + suite + "\" tests=\"" + (Object.keys(files).length === 0 ? 1 : Object.keys(files).length) + "\" failures=\"" + results.length + "\" errors=\"0\">");
 
-    process.stdout.write(out);
-    return out;
+  // we need at least 1 empty test
+  if (!results.length) {
+    out.push("\t<testcase name=\"" + suite + "\" />");
+  }
+
+  for (var file in files) {
+    out.push("\t<testcase name=\"" + file + "\">");
+    out.push("\t\t<failure message=\"" + failure_message(files[file]) + "\">");
+    out.push(failure_details(files[file]));
+    out.push("\t\t</failure>");
+    out.push("\t</testcase>");
+  }
+
+  out.push("</testsuite>");
+  out = out.join("\n") + "\n";
+
+  process.stdout.write(out);
+  return out;
 
 };
