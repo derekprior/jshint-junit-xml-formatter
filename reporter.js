@@ -74,6 +74,9 @@ module.exports =
     }
 
     out.push("</testsuite>");
-    process.stdout.write(out.join("\n") + "\n");
+    out = out.join("\n") + "\n";
+
+    process.stdout.write(out);
+    return out;
   }
 };
