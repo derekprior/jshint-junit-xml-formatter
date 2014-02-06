@@ -2,6 +2,7 @@
   "name": "jshint-junit-reporter",
   "version": "0.0.6",
   "description": "A JSHint reporter for jUnit.",
+  "license": "MIT",
   "main": "index.js",
   "scripts": {
     "test": "node test.js"
