@@ -1,5 +1,7 @@
 var assert = require('assert');
 var path = require('path');
+var fs = require('fs');
+var outputFile = __dirname + '/test.xml';
 var tests = [];
 var mock1 = []; // 0 error
 var mock2 = [{  // 1 error
@@ -124,6 +126,23 @@ tests.push(function() {
   var results = formatter.reporter(mock3);
   process.stdout.write = oldWrite;
   if (results.replace(strip, '') !== expected3.replace(strip, '')) {
+    throw new Error('Unexpected results');
+  }
+});
+
+// test for output file
+tests.push(function() {
+  var formatter = require('./reporter.js');
+  var results = formatter.reporter(mock3, null, { outputFile: outputFile });
+  var success = false;
+  var content;
+  if (fs.existsSync(outputFile)) {
+    content = fs.readFileSync(outputFile, "utf8");
+    if (content.replace(strip, '') === expected3.replace(strip, ''))
+      success = true;
+    fs.unlinkSync(outputFile);
+  }
+  if (!success) {
     throw new Error('Unexpected results');
   }
 });
