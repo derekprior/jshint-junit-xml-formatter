@@ -2,7 +2,12 @@
 
 "use strict";
 
+var fs = require('fs');
+
 var suite = 'jshint';
+
+var wrStream;
+var outputFile;
 
 function encode(s) {
   var pairs = {
@@ -39,10 +44,16 @@ function failure_details(failures) {
   return msg.join("\n");
 }
 
-exports.reporter = function (results) {
+exports.reporter = function (results, data, opts) {
 
   var out = [];
   var files = {};
+
+  opts = opts || {};
+  opts.outputFile = opts.outputFile || null;
+
+  if (opts.outputFile && !outputFile)
+    outputFile = opts.outputFile;
 
   results.forEach(function (result) {
     result.file = result.file.replace(/^\.\//, '');
@@ -69,9 +80,14 @@ exports.reporter = function (results) {
   }
 
   out.push("</testsuite>");
-  out = out.join("\n") + "\n";
 
-  process.stdout.write(out);
+  if (outputFile) {
+    fs.writeFileSync(outputFile, out.join('\n'));
+  } else {
+    out = out.join("\n") + "\n";
+    process.stdout.write(out);
+  }
+
   return out;
 
 };
