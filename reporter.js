@@ -64,7 +64,7 @@ exports.reporter = function (results, data, opts) {
   });
 
   out.push("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
-  out.push("<testsuite name=\"" + suite + "\" tests=\"" + (Object.keys(files).length === 0 ? 1 : Object.keys(files).length) + "\" failures=\"" + results.length + "\" errors=\"0\">");
+  out.push("<testsuite name=\"" + suite + "\" tests=\"" + (data.length || 0) + "\" failures=\"" + results.length + "\" errors=\"0\">");
 
   // we need at least 1 empty test
   if (!results.length) {
