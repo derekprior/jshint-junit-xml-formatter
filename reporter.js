@@ -44,6 +44,26 @@ function failure_details(failures) {
 	return msg.join("\n");
 }
 
+//jsxhint stores the files in a tmp dir
+//this means the data list and the results array don't match
+//to remedy we can loop through list and remove the non-matching string
+function getMatchingResultFileName(file, failureList) {
+
+	for (var failureFile in failureList) {
+
+		//if the end of the file provided identically matches that in the failures list
+		//the files will be the same just 1 has a bunch of tmpdir rubbish at the front.
+		//return the failureFile link
+
+		if (file.indexOf(failureFile) === (file.length-failureFile.length)) {
+			return failureFile;
+		}
+
+		return file;
+	}
+
+}
+
 exports.reporter = function (results, data, opts) {
 
 	var out = [];
@@ -57,6 +77,7 @@ exports.reporter = function (results, data, opts) {
 
 	results.forEach(function (result) {
 		result.file = result.file.replace(/^\.\//, '');
+
 		if (!files[result.file]) {
 			files[result.file] = [];
 		}
@@ -72,16 +93,28 @@ exports.reporter = function (results, data, opts) {
 	}
 
 	for (var i = 0; i < data.length; i++) {
-		var file = data[i].file;
-		//has an error
-		if (files[file]) {
-			out.push("\t<testcase name=\"" + file + "\">");
-			out.push("\t\t<failure message=\"" + failure_message(files[file]) + "\">");
-			out.push(failure_details(files[file]));
-			out.push("\t\t</failure>");
-			out.push("\t</testcase>");
-		} else {
-			out.push("\t<testcase name=\"" + file + "\" />");
+		var fileName = data[i].file;
+
+		//so this works with jsxhint as well
+		//jsxhint puts the files into a cache dir
+		//but doesn't change the location of the results to match
+		//so we have to work around it
+		if (fileName.indexOf('/jsxhint/') > -1) {
+			fileName = getMatchingResultFileName(fileName, files);
+		}
+
+		//jshint seems to shove itself at the start in some versions
+		if (fileName !== 'jshint') {
+			//has an error
+			if (files[fileName]) {
+				out.push("\t<testcase name=\"" + fileName + "\">");
+				out.push("\t\t<failure message=\"" + failure_message(files[fileName]) + "\">");
+				out.push(failure_details(files[fileName]));
+				out.push("\t\t</failure>");
+				out.push("\t</testcase>");
+			} else {
+				out.push("\t<testcase name=\"" + fileName + "\" />");
+			}
 		}
 	}
 
